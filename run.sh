@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 
 git pull --ff-only
-./startdev.sh
+./startdev.sh $1
