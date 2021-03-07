@@ -371,7 +371,9 @@ class TraceParser:
 
 
 if __name__ == "__main__":
+    #cc:new arg parser
     parser = argparse.ArgumentParser(description='Trace parser')
+    #cc:add path
     parser.add_argument('path', metavar="<path/to/trace>", help='Trace path')
     parser.add_argument('--topology', type=str,
                         help='text file obtained with for i in /sys/devices/system/cpu/cpu*/topology/thread_siblings_list; do cat $i; done > out.txt',
@@ -381,26 +383,32 @@ if __name__ == "__main__":
     parser.add_argument('--merge-vhost', action="store_true", help='Consider vhost processes as part of the Qemu process (based on the procname)', default=False)
     parser.add_argument('--no-pid-trust', action="store_true", help='Consider vhost processes as part of the Qemu process (based on the procname)', default=False)
 
+    #cc:get args
     args = parser.parse_args()
 
+    #cc:set pid_trust
     if args.no_pid_trust:
         pid_trust = False
     else:
         pid_trust = True
 
+    #cc:create trace object, get handle for the trace path and format
     traces = TraceCollection()
     handle = traces.add_traces_recursive(args.path, "ctf")
     if handle is None:
         sys.exit(1)
 
+    #cc:add pids from args to display_pids as a list
     display_pids = []
     if args.pids is not None:
         for i in args.pids.split(','):
             display_pids.append(int(i))
 
+    #cc:setup traceparser and parse
     t = TraceParser(traces, args.topology, display_pids, args.show_details,
                     args.merge_vhost, pid_trust)
     t.parse()
 
+    #cc:remove trace from trace collection to close out the file
     for h in handle.values():
         traces.remove_trace(h)
