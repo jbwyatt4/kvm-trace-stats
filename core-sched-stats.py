@@ -201,6 +201,7 @@ class TraceParser:
                 id2 = int(line.split(',')[1])
                 self.siblings[id1] = id2
                 self.siblings[id2] = id1
+                print("{} and {}".format(id1, id2))
 
     def ns_to_hour_nsec(self, ns):
         d = time.localtime(ns/NSEC_PER_SEC)
