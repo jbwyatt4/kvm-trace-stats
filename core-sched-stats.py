@@ -191,6 +191,7 @@ class TraceParser:
         # stats in the thread running on the sibling hwthread.
         # (comm, tid) as the key to distinguish the swapper threads (PID 0).
         self.current_cosched_begin_ts = {}
+        print("Hello100")
 
     def parse_topo(self, filename):
         self.siblings = {}
