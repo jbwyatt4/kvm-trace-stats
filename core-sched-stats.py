@@ -215,6 +215,7 @@ class TraceParser:
         count = 0
         self.ready = False
         #cc:iterate over the events
+        print(self.trace.events)
         for event in self.trace.events:
             print("Hello1001")
             #cc:set to False before iteration
