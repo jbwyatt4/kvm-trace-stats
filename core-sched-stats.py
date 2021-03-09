@@ -191,14 +191,16 @@ class TraceParser:
         # stats in the thread running on the sibling hwthread.
         # (comm, tid) as the key to distinguish the swapper threads (PID 0).
         self.current_cosched_begin_ts = {}
-        print("Hello100")
+        print("Hello1000")
 
     def parse_topo(self, filename):
         self.siblings = {}
         with open(filename) as f:
             for line in f:
+                #cc:split by comma
                 id1 = int(line.split(',')[0])
                 id2 = int(line.split(',')[1])
+                #cc:why are these switched?
                 self.siblings[id1] = id2
                 self.siblings[id2] = id1
                 print("{} and {}".format(id1, id2))
@@ -212,7 +214,10 @@ class TraceParser:
         # iterate over all the events
         count = 0
         self.ready = False
+        #cc:iterate over the events
         for event in self.trace.events:
+            print("Hello1001")
+            #cc:set to False before iteration
             if not self.ready:
                 # Wait to have seen at least one sched_switch per cpu before starting
                 if event.name == "sched:sched_switch":
@@ -248,6 +253,7 @@ class TraceParser:
         for p in self.processes.keys():
             if len(self.display_pids) > 0 and p not in self.display_pids:
                 continue
+            #cc:print out process keys
             print(self.processes[p])
 
 
