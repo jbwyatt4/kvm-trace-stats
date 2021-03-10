@@ -3,12 +3,12 @@
 import sys
 
 try:
-    from babeltrace import Reader
+    from babeltrace import reader
 except ImportError:
     # quick fix for debian-based distros
     sys.path.append("/usr/local/lib/python%d.%d/site-packages" %
                     (sys.version_info.major, sys.version_info.minor))
-    from babeltrace import Reader
+    from babeltrace import reader
 
 trace_path = sys.argv[1]
 
