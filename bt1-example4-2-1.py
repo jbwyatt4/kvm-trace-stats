@@ -9,7 +9,7 @@ trace_path = tempfile.mkdtemp()
 print('trace path: {}'.format(trace_path))
 
 # our writer
-writer = btw.Writer(trace_path)
+writer = btw.CTFWriter(trace_path)
 
 # create one default clock and register it to the writer
 clock = btw.Clock('my_clock')
