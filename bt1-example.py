@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-import babeltrace
+from babeltrace import TraceCollection
 
 trace_path = sys.argv[1]
 
