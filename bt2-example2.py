@@ -3,6 +3,8 @@
 import bt2
 import sys
 
+# Can provide a directory to the trace (not sure how to use this)
+
 # RuntimeError: Some auto source component specs did not produce any component: ~/perf.data
 # means it could not find the file
 

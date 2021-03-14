@@ -3,6 +3,8 @@
 import bt2
 import sys
 
+# Can only read a single example + requires an exact path
+
 # Find the `ctf` plugin (shipped with Babeltrace 2).
 ctf_plugin = bt2.find_plugin('ctf')
 
