@@ -26,7 +26,7 @@ for msg in msg_it:
 
   # Only check `sched_switch` events.
   if event.name != 'sched_switch':
-    print(event.name)
+    print(event.name) # name is sched:sched_switch, assuming LTTng uses sched_switch
     continue
 
   # In an LTTng trace, the `cpu_id` field is a packet context field
