@@ -18,3 +18,13 @@ for msg in msg_it:
       print(msg.event.payload_field['fd'])
   else:
     print(msg)
+
+# Example of what else prints
+# <bt2.message._StreamBeginningMessageConst object @ 0x2976d80>
+# <bt2.message._StreamBeginningMessageConst object @ 0x2980000>
+# <bt2.message._PacketBeginningMessageConst object @ 0x2976e40>
+# <bt2.message._PacketBeginningMessageConst object @ 0x29800c0>
+# <bt2.message._PacketEndMessageConst object @ 0x298cf00>
+# <bt2.message._StreamEndMessageConst object @ 0x298cf60>
+# <bt2.message._PacketEndMessageConst object @ 0x298d0d0>
+# <bt2.message._StreamEndMessageConst object @ 0x298d130>
