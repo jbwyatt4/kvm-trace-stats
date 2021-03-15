@@ -41,6 +41,22 @@ for msg in msg_it:
     # We start here.
     last_ns_from_origin = ns_from_origin
 
+  # Previous process's short name.
+  prev_comm = str(event['prev_comm'])
+
+  # Initialize an entry in our dictionary if not done yet.
+  if prev_comm not in exec_times:
+    exec_times[prev_comm] = 0
+
+  # Compute previous process's execution time.
+  diff_ns = ns_from_origin - last_ns_from_origin
+
+  # Update execution time of this cmd.
+  exec_times[prev_comm] += diff_ns
+
+  # Update last event's time.
+  last_ns_from_origin = ns_from_origin
+
 # Print top 5
 for comm, ns in exec_times.most_common(5):
   print('{:20}{} s'.format(comm, ns / 1e9))
