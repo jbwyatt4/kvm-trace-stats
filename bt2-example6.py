@@ -16,3 +16,5 @@ for msg in msg_it:
     if 'fd' in msg.event.payload_field:
       # Print the `fd` event payload field's value.
       print(msg.event.payload_field['fd'])
+  else:
+    print(msg)
