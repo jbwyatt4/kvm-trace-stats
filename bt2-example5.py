@@ -25,8 +25,8 @@ for msg in msg_it:
   event = msg.event
 
   # Only check `sched_switch` events.
-  if event.name != 'sched_switch':
-    continue
+  # if event.name != 'sched_switch':
+  #   continue
 
   # In an LTTng trace, the `cpu_id` field is a packet context field
   # The mapping interface of `event` can still find it
