@@ -9,6 +9,9 @@ import datetime
 # Create a trace collection msg iterator from the first cmd arg
 msg_it = bt2.TraceCollectionMessageIterator(sys.argv[1])
 
+# Last event's time (ns from origin).
+last_event_ns_from_origin = None
+
 # Iterate the trace msgs
 for msg in msg_it:
   # `bt2._EventMessageConst` is the Python type of an event msg
@@ -21,7 +24,7 @@ for msg in msg_it:
     diff_s = 0
 
     if last_event_ns_from_origin is not None:
-      diff_s = (ns_from_origin - last_even_ns_from_origin) / 1e9
+      diff_s = (ns_from_origin - last_event_ns_from_origin) / 1e9
 
     # Create a `datetime.datetime` object from
     # `ns_from_origin` for presentation. Note that such an
