@@ -40,4 +40,4 @@ for msg in msg_it:
     last_event_ns_from_origin = ns_from_origin
 
   else:
-    print(msg)
+    pass#print(msg)
