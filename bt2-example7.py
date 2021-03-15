@@ -41,3 +41,12 @@ for msg in msg_it:
 
   else:
     pass#print(msg)
+
+# Warning
+# This printed from epoch-need to fix
+# -
+# 1970-01-01 00:27:00.078884 (+0.000014 s): sched:sched_waking
+# 1970-01-01 00:27:00.078904 (+0.000020 s): sched:sched_switch
+# 1970-01-01 00:27:00.078918 (+0.000014 s): sched:sched_switch
+# 1970-01-01 00:27:00.078933 (+0.000015 s): sched:sched_switch
+# 1970-01-01 00:27:00.582873 (+0.503940 s): sched:sched_waking
