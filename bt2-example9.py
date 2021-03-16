@@ -2,7 +2,6 @@
 
 import bt2
 import sys
-import collections
 
 # Inspect event classes
 # each event stream is a stream class instance
