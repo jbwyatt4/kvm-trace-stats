@@ -223,22 +223,36 @@ class TraceParser:
                 # Wait to have seen at least one sched_switch per cpu before starting
                 if event.name == "sched:sched_switch":
                     next_tuple = (event['next_comm'], event['next_pid'])
+                    #cc:set tuple_by_hwthread that matches to cpu_id to equal next_tuple
                     self.tuple_by_hwthread[event['cpu_id']] = next_tuple
+                    #cc:for current cosched set begin timestamp
                     self.current_cosched_begin_ts[next_tuple] = event['timestamp']
+                    #cc:set last switch to same timestamp? why?
                     self.tids_last_switch_in_ts[event['next_pid']] = event['timestamp']
 
+                    #cc:if current cpu_id not in seen_sched_switch_cpu
                     if event['cpu_id'] not in self.seen_sched_switch_cpu:
+                        #cc:add the cpu_id to the seen_sched_switch_cpu
                         self.seen_sched_switch_cpu.append(event['cpu_id'])
+                    #cc:if length of seen_sched_switch_cpu list equals nr_cpus
                     if len(self.seen_sched_switch_cpu) == self.nr_cpus:
+                        #cc:exit loop
                         self.ready = True
+                        #cc: set the global begin_ts
                         global begin_ts
+                        #set with this current timestamp(which would be the last in the list?)
                         begin_ts = event['timestamp']
 #                        print(begin_ts)
 #                        print("Ready: %d (%s events skipped)" % (len(self.seen_sched_switch_cpu), count))
+                    #cc:jump to start of loop if not ready
                     continue
 
+            #cc:once ready, we finally get to this code
+            #cc:change event name to handle_someeventname
+            #cc:plus replace all : and + with _
             method_name = "handle_%s" % event.name.replace(":", "_").replace("+", "_")
             # call the function to handle each event individually
+            #cc: check if attribute exists in python object, if it does, get the value and call a function on it with the event as an arg
             if hasattr(TraceParser, method_name):
                 func = getattr(TraceParser, method_name)
                 func(self, event)
@@ -246,12 +260,15 @@ class TraceParser:
 #            if count == 1000000:
 #                print(self.ns_to_hour_nsec(event.timestamp))
 #                break
+        #cc:set the ending timestamp after breaking out of the loop
         global end_ts
         end_ts = event['timestamp']
 
 #        print("Trace duration: %s ns (%s events)" % (end_ts - begin_ts, count))
 
+        #cc:iterate over the keys for processes
         for p in self.processes.keys():
+            #cc:skip p if not in display_pids, but only if there is more than 1 display_pid
             if len(self.display_pids) > 0 and p not in self.display_pids:
                 continue
             #cc:print out process keys
