@@ -357,6 +357,7 @@ class TraceParser:
 
 
     def handle_sched_sched_switch(self, event):
+        #cc:fetch values from event hash
         timestamp = event.timestamp
         cpu_id = event["cpu_id"]
         perf_tid = event["perf_tid"]
@@ -373,13 +374,18 @@ class TraceParser:
         next_tuple = (next_comm, next_tid)
         sibling_cpu_id = self.siblings[cpu_id]
 
+        #cc:get process tid from prev_tid, pref_pid, and prev_comm
         prev_proc = self.get_process_tid(prev_tid, pid=perf_pid, comm=prev_comm)
 
+        #cc:get sibling tuple from hardware thread
         sibling_tuple = self.tuple_by_hwthread[sibling_cpu_id]
         sibling_tid = sibling_tuple[1]
+        #cc:get sibling process (handle?)
         sibling_proc = self.get_process_tid(sibling_tid)
 
         # SWITCH OUT
+        #cc:what does switch out mean in this context?
+        #cc:when cosched begins?
         if prev_tuple in self.current_cosched_begin_ts.keys():
             co_sched_ns = timestamp - self.current_cosched_begin_ts[prev_tuple]
             prev_proc.update_co_sched_stats(sibling_proc, sibling_tuple, prev_tuple, co_sched_ns)
@@ -387,6 +393,7 @@ class TraceParser:
             prev_proc.total_runtime += timestamp - self.tids_last_switch_in_ts[prev_tid]
 
         # SWITCH IN
+        #cc:get the next set of data?
         self.current_cosched_begin_ts[next_tuple] = timestamp
         self.current_cosched_begin_ts[sibling_tuple] = timestamp
         self.tuple_by_hwthread[cpu_id] = next_tuple
