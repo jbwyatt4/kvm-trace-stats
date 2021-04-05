@@ -281,13 +281,24 @@ class TraceParser:
         # of the same "process" as qemu with PID ZZZ. This is to experiment
         # the impact of having the vhost threads as part of the same group/tag
         # as their qemu process.
+        #cc:what is the vhost-ZZZ process?
+        #cc:the below code checks for 'vhost-' for qemu; to experiement with having the vhost thread as part of the same group tag
+
+        #cc:what is merge_vhost used for?
+        #cc:check if merge_vhost exists
         if self.merge_vhost:
+            #cc:check if comm exists and starts with vhost-
+            #cc:else if vhost_tids has keys and pid is set; iterate through the keys
             if comm is not None and comm.startswith("vhost-"):
+                #cc:split the comm value with '-', save the latter value as qemu_pid
                 qemu_pid = int(comm.split('-')[1])
+                #cc:set qemu_pid to Parser's vhost_tids with key tid
                 self.vhost_tids[tid] = qemu_pid
+                #cc:if pid is not none set pid to qemu_pid
                 if pid is not None:
                     pid = qemu_pid
             elif tid in self.vhost_tids.keys() and pid is not None:
+                #cc:huh, set the last value to pid?
                 pid = self.vhost_tids[tid]
 
         if tid in self.tids.keys():
