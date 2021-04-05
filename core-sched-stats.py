@@ -301,25 +301,43 @@ class TraceParser:
                 #cc:huh, set the last value to pid?
                 pid = self.vhost_tids[tid]
 
+        #cc:for every key inside tids, get the key
+        #cc:also using the same var name for your iterator as an argument
         if tid in self.tids.keys():
+            #cc:likely get the process for each key
             p = self.tids[tid]
+            #cc:if tid == pid (not sure which tid? likely the iterator)
+            #cc:and both p.comm and comm is set
             if tid == pid and p.comm is None and comm is not None:
+                #cc:set p.comm to comm
                 p.comm = comm
+            #cc:return p for any key
             return p
+        #cc:if no keys in tids, check if pid_trust is set
         if self.pid_trust:
+            #cc:if pid is not set, return None
             if pid is None:
                 return None
+            #cc:if pid is any of the processes.keys set to p
+            #cc:else create a new Process object with pid and TraceParser's show_details
             if pid in self.processes.keys():
                 p = self.processes[pid]
             else:
                 p = Process(pid, self.show_details)
                 self.processes[pid] = p
                 self.tids[pid] = p
+            #cc:regardless set p to the current tid key in tids
             self.tids[tid] = p
+            #cc:now we check if tid is not in p.threads
             if tid not in p.threads:
+                #cc:if comm does not start with vhost-
                 if not comm.startswith("vhost-"):
+                    #cc:we add the tid value to p.threads
                     p.threads.append(tid)
+        #cc:if merge_host not set
         else:
+            #cc:if pid is any of the processes.keys set to p
+            #cc:else create a new Process object with pid and TraceParser's show_details
             if tid in self.processes.keys():
                 p = self.processes[tid]
             else:
@@ -327,6 +345,7 @@ class TraceParser:
                 self.processes[tid] = p
                 self.tids[tid] = p
             self.tids[tid] = p
+        #cc:return p
         return p
 
     def __check_lb_issues(self, tid, now):
