@@ -87,6 +87,8 @@ class Process:
             print("Missing case %s and %s" % (prev_tuple, sibling_tid))
 
     def __str__(self):
+
+        #cc:get local neighbors
         tmp_list = ""
         total = 0
         #cc:iterate through all the keys of local_neighbors_stats, set them as neighbors
@@ -112,9 +114,10 @@ class Process:
         #cc:add more output text
         co_sched_list = "  - local neighbors (total: %s ns, %0.3f %% of process runtime):\n%s" % (total, pc, tmp_list)
 
+        #cc:get idle neighbors
         tmp_list = ""
         total = 0
-        #cc:iterate over idel_neighbors_stats keys as neighbor
+        #cc:iterate over idle_neighbors_stats keys as neighbor
         for neighbor in self.idle_neighbors_stats.keys():
             #cc:add idle neighbors together
             total += self.idle_neighbors_stats[neighbor]
@@ -129,6 +132,7 @@ class Process:
             pc = total / self.total_runtime * 100
         co_sched_list += "  - idle neighbors (total: %s ns, %0.3f %% of process runtime):\n%s" % (total, pc, tmp_list)
 
+        #cc:get foregin neighbors
         tmp_list = ""
         total = 0
         for neighbor in self.foreign_neighbors_stats.keys():
@@ -154,6 +158,7 @@ class Process:
         _min = None
         _max = 0
 
+        # for each period in lb_issue_durations
         for period in self.lb_issue_durations:
             total += period
             if _min is None:
@@ -162,6 +167,7 @@ class Process:
                 _min = period
             if period > _max:
                 _max = period
+        #cc:print ineffective periods or period stats
         if len(self.lb_issue_durations) == 0:
             pc = 0
             co_sched_list += "  - inefficient periods (total: %s ns, %0.3f %% of process runtime)\n" % (total, pc)
