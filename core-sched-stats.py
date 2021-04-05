@@ -44,7 +44,7 @@ class Process:
         self.unknown_cosched_ns = 0
 
     def update_or_create(self, stats_dict, key, co_sched_ns):
-        #cc:add key co_sched_ns to stats_dict
+        #cc:add key co_sched_ns to stats_dict, ignore keys that do not exist in stats_dict
         if key not in stats_dict.keys():
             stats_dict[key] = 0
         stats_dict[key] += co_sched_ns
@@ -55,10 +55,13 @@ class Process:
             self.unknown_cosched_ns += co_sched_ns
             return
 
+        #cc:if pid is 0 (wouldn't that be the kernel?)
+        #cc:call update_or_create
         if sibling_proc.pid == 0:
             self.update_or_create(self.idle_neighbors_stats,
                                   sibling_tuple,
                                   co_sched_ns)
+        #cc:if self does not equal sibling_proc task
         elif self != sibling_proc:
             if self.pid == 0:
                 sibling_proc.update_or_create(sibling_proc.idle_neighbors_stats,
@@ -71,6 +74,7 @@ class Process:
             self.update_or_create(self.foreign_neighbors_stats,
                                   sibling_tuple,
                                   co_sched_ns)
+        #cc:if self does equal sibling_proc task
         elif self == sibling_proc:
             sibling_proc.update_or_create(sibling_proc.local_neighbors_stats,
                                           prev_tuple,
@@ -78,30 +82,43 @@ class Process:
             self.update_or_create(self.local_neighbors_stats,
                                   sibling_tuple,
                                   co_sched_ns)
+        #cc:if no other case print missing case
         else:
             print("Missing case %s and %s" % (prev_tuple, sibling_tid))
 
     def __str__(self):
         tmp_list = ""
         total = 0
+        #cc:iterate through all the keys of local_neighbors_stats, set them as neighbors
         for neighbor in self.local_neighbors_stats.keys():
+            #cc:add local neighbors together, seems it is an array?
             total += self.local_neighbors_stats[neighbor]
             if self.show_details:
+                #cc:if show_details is set show neighbor [0], [1], and local_neighbors_stats[]
                 tmp_list += "    - %s (%s): %s ns\n" % (neighbor[0],
                                                          neighbor[1],
                                                          self.local_neighbors_stats[neighbor])
+        #cc:add this text with self.threads as text
         tmp_list += "  - threads: %s\n" % (self.threads)
 
+        #cc:if total_runtime or total == 0, pc =0
+        #cc:what is pc?
+        #cc:likely clock
+        #cc:else take the total / total_runtime * 100, set it to pc
         if self.total_runtime == 0 or total == 0:
             pc = 0
         else:
             pc = total / self.total_runtime * 100
+        #cc:add more output text
         co_sched_list = "  - local neighbors (total: %s ns, %0.3f %% of process runtime):\n%s" % (total, pc, tmp_list)
 
         tmp_list = ""
         total = 0
+        #cc:iterate over idel_neighbors_stats keys as neighbor
         for neighbor in self.idle_neighbors_stats.keys():
+            #cc:add idle neighbors together
             total += self.idle_neighbors_stats[neighbor]
+            #add output text
             if self.show_details:
                 tmp_list += "    - %s (%s): %s ns\n" % (neighbor[0],
                                                          neighbor[1],
