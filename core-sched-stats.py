@@ -382,7 +382,7 @@ if __name__ == "__main__":
     else:
         pid_trust = True
 
-    traces = bt2.TraceCollectionMessageIterator(args.path + "/ctf")
+    traces = bt2.TraceCollectionMessageIterator(args.path)
     if traces is None:
         sys.exit(1)
 
