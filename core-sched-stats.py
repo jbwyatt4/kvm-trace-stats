@@ -7,19 +7,12 @@
 import sys
 import time
 import argparse
-import operator
+import operator #keep?
 import statistics
 
+import bt2
+
 NSEC_PER_SEC = 1000000000
-
-try:
-    from babeltrace import TraceCollection
-except ImportError:
-    # quick fix for debian-based distros
-    sys.path.append("/usr/local/lib/python%d.%d/site-packages" %
-                    (sys.version_info.major, sys.version_info.minor))
-    from babeltrace import TraceCollection
-
 
 begin_ts = None
 end_ts = None
@@ -389,9 +382,8 @@ if __name__ == "__main__":
     else:
         pid_trust = True
 
-    traces = TraceCollection()
-    handle = traces.add_traces_recursive(args.path, "ctf")
-    if handle is None:
+    traces = bt2.TraceCollectionMessageIterator(args.path + "/ctf")
+    if traces is None:
         sys.exit(1)
 
     display_pids = []
