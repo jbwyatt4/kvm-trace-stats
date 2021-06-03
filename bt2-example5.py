@@ -25,7 +25,8 @@ for msg in msg_it:
   event = msg.event
 
   # Only check `sched_switch` events.
-  if event.name != 'sched_switch':
+  # WARNING: bug in documentation, need to add 'sched:'
+  if event.name != 'sched:sched_switch':
     print(event.name) # name is sched:sched_switch, assuming LTTng uses sched_switch
     continue
 
